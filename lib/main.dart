@@ -57,7 +57,7 @@ class _PerguntaAppState extends State<PerguntaApp> {
         ),
         body: temPerguntaSelecionada
             ? Questionario(
-                perguntas: _perguntas,
+                perguntas: _perguntas as List<Map<String, Object>>,
                 perguntaSelecionada: _perguntaSelecionada,
                 quandoResponder: _responder,
               )
