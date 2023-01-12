@@ -1,63 +1,67 @@
 import 'package:flutter/material.dart';
-import './questao.dart';
-import './resposta.dart';
+import './questionario.dart';
+import '/resultado.dart';
 
 main() => runApp(PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
-  var _perguntaSelecionada = 0;
+  int _perguntaSelecionada = 0;
+  final List<Map> _perguntas = const [
+    {
+      'texto': 'Qual é a sua cor favorita?',
+      'respostas': [
+        {'texto': 'Preto', 'nota': 10},
+        {'texto': 'Vermelho', 'nota': 8},
+        {'texto': 'Verde', 'nota': 5},
+        {'texto': 'Branco', 'nota': 3},
+      ],
+    },
+    {
+      'texto': 'Qual é o seu animal favorito?',
+      'respostas': [
+        {'texto': 'Coelho', 'nota': 10},
+        {'texto': 'Cobra', 'nota': 5},
+        {'texto': 'Elefante', 'nota': 3},
+        {'texto': 'Leao', 'nota': 1},
+      ],
+    },
+    {
+      'texto': 'Qual seu personagem favorito?',
+      'respostas': [
+        {'texto': 'Rei Julian', 'nota': 10},
+        {'texto': 'Alfred', 'nota': 8},
+        {'texto': 'Joao Frango', 'nota': 5},
+        {'texto': 'Pernalonga', 'nota': 1},
+      ],
+    }
+  ];
 
   void _responder() {
-    setState(() {
-      _perguntaSelecionada++;
-    });
+    if (temPerguntaSelecionada) {
+      setState(() {
+        _perguntaSelecionada++;
+      });
+    }
+  }
+
+  bool get temPerguntaSelecionada {
+    return _perguntaSelecionada < _perguntas.length;
   }
 
   @override
   Widget build(BuildContext context) {
-    final perguntas = [
-      {
-        'texto': 'Qual é a sua cor favorita?',
-        'respostas': [
-          'Preto',
-          'Vermelho',
-          'Verde',
-          'Branco',
-        ],
-      },
-      {
-        'texto': 'Qual é o seu animal favorito?',
-        'respostas': [
-          'Coelho',
-          'Cobra',
-          'Elefante',
-          'Leao',
-        ],
-      },
-      {
-        'texto': 'Qual seu personagem favorito?',
-        'respostas': [
-          'Rei Julian',
-          'Alfred',
-          'Joao Frango',
-          'Pernalonga',
-        ],
-      }
-    ];
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('Perguntas'),
         ),
-        body: Column(
-          children: <Widget>[
-            Questao(perguntas[_perguntaSelecionada]['texto'] as String),
-            Resposta('Resposta 1', _responder),
-            Resposta('Resposta 2', _responder),
-            Resposta('Resposta 3', _responder),
-          ],
-        ),
+        body: temPerguntaSelecionada
+            ? Questionario(
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                quandoResponder: _responder,
+              )
+            : Resultado(),
       ),
     );
   }
