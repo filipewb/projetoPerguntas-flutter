@@ -6,42 +6,52 @@ main() => runApp(PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
   int _perguntaSelecionada = 0;
-  final List<Map> _perguntas = const [
+  int _pontuacaoTotal = 0;
+
+  final List<Map<String, Object>> _perguntas = const [
     {
       'texto': 'Qual é a sua cor favorita?',
       'respostas': [
-        {'texto': 'Preto', 'nota': 10},
-        {'texto': 'Vermelho', 'nota': 8},
-        {'texto': 'Verde', 'nota': 5},
-        {'texto': 'Branco', 'nota': 3},
+        {'texto': 'Preto', 'pontuacao': 10},
+        {'texto': 'Vermelho', 'pontuacao': 8},
+        {'texto': 'Verde', 'pontuacao': 5},
+        {'texto': 'Branco', 'pontuacao': 3},
       ],
     },
     {
       'texto': 'Qual é o seu animal favorito?',
       'respostas': [
-        {'texto': 'Coelho', 'nota': 10},
-        {'texto': 'Cobra', 'nota': 5},
-        {'texto': 'Elefante', 'nota': 3},
-        {'texto': 'Leao', 'nota': 1},
+        {'texto': 'Coelho', 'pontuacao': 10},
+        {'texto': 'Cobra', 'pontuacao': 5},
+        {'texto': 'Elefante', 'pontuacao': 3},
+        {'texto': 'Leao', 'pontuacao': 1},
       ],
     },
     {
       'texto': 'Qual seu personagem favorito?',
       'respostas': [
-        {'texto': 'Rei Julian', 'nota': 10},
-        {'texto': 'Alfred', 'nota': 8},
-        {'texto': 'Joao Frango', 'nota': 5},
-        {'texto': 'Pernalonga', 'nota': 1},
+        {'texto': 'Rei Julian', 'pontuacao': 10},
+        {'texto': 'Alfred', 'pontuacao': 8},
+        {'texto': 'Joao Frango', 'pontuacao': 5},
+        {'texto': 'Pernalonga', 'pontuacao': 1},
       ],
     }
   ];
 
-  void _responder() {
+  void _responder(int pontuacao) {
     if (temPerguntaSelecionada) {
       setState(() {
         _perguntaSelecionada++;
+        _pontuacaoTotal += pontuacao;
       });
     }
+  }
+
+  void _reiniciarQuestionario() {
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
+    });
   }
 
   bool get temPerguntaSelecionada {
@@ -57,11 +67,11 @@ class _PerguntaAppState extends State<PerguntaApp> {
         ),
         body: temPerguntaSelecionada
             ? Questionario(
-                perguntas: _perguntas as List<Map<String, Object>>,
+                perguntas: _perguntas,
                 perguntaSelecionada: _perguntaSelecionada,
                 quandoResponder: _responder,
               )
-            : Resultado(),
+            : Resultado(_pontuacaoTotal, _reiniciarQuestionario),
       ),
     );
   }
